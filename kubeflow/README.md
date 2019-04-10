@@ -14,6 +14,11 @@ $ mkdir ${KUBEFLOW_SRC}
 $ cd ${KUBEFLOW_SRC}
 $ KUBEFLOW_TAG=v0.4.1
 $ curl https://raw.githubusercontent.com/kubeflow/kubeflow/${KUBEFLOW_TAG}/scripts/download.sh | bash
+
+# 또는 shell script 실행
+
+$ cd kubeflow
+$ ./kf-download.sh
 ```
 
 ## - ksonnet 응용 프로그램 설정 및 Kubeflow 전개
@@ -25,6 +30,11 @@ $ ./scripts/kfctl.sh init ${KFAPP} --platform none
 $ cd ${KFAPP}
 $ ../scripts/kfctl.sh generate k8s
 $ ../scripts/kfctl.sh apply k8s
+
+# 또는 shell script 실행
+
+$ cd kubeflow
+$ ./kf-setup.sh
 ```
 
 ## - 전개된 Kubeflow 삭제
