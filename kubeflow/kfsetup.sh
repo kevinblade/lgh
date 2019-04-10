@@ -1,6 +1,6 @@
 KUBEFLOW_TAG=v0.4.1
 KUBEFLOW_SRC=$(pwd)/src/${KUBEFLOW_TAG}
-KFAPP=kf-demo-app
+KFAPP=kfapp
 
 ${KUBEFLOW_SRC}/scripts/kfctl.sh init ${KFAPP} --platform none
 cd ${KFAPP}
