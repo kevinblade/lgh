@@ -9,12 +9,26 @@
 
 ## - kubeflow 설치
 ```
-# 다운로드
-$ kfdownload.sh
+$ export KUBEFLOW_SRC="kubeflow 설치 경로"
+$ mkdir ${KUBEFLOW_SRC}
+$ cd ${KUBEFLOW_SRC}
+$ export KUBEFLOW_TAG=v0.4.1
+$ curl https://raw.githubusercontent.com/kubeflow/kubeflow/${KUBEFLOW_TAG}/scripts/download.sh | bash
 ```
 
-## - 응용 프로그램 설정
+## - 응용 프로그램 설정 및 Kubeflow에 배포
 ```
-# kfsetup.sh 파일에서 KFAPP을 수정한 후 실행.
-$ kfsetup.sh
+$ export KUBEFLOW_SRC="kubeflow 설치 경로"
+$ export KFAPP=kf-demo-app
+$ cd ${KUBEFLOW_SRC}
+$ ${KUBEFLOW_SRC}/scripts/kfctl.sh init ${KFAPP} --platform none
+$ cd ${KFAPP}
+$ ${KUBEFLOW_SRC}/scripts/kfctl.sh generate k8s
+$ ${KUBEFLOW_SRC}/scripts/kfctl.sh apply k8s
+```
+
+## - Kubeflow에서 배포 삭제
+```
+$ cd ${KUBEFLOW_SRC}/${KFAPP}
+$ ${KUBEFLOW_SRC}/scripts/kfctl.sh delete k8s
 ```
