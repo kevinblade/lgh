@@ -7,40 +7,38 @@
   - Liux: https://www.kubeflow.org/docs/components/ksonnet/
   - macOS: https://ksonnet.io/get-started/
 
-## - kubeflow 설치
+## - ksonnet을 이용한 KubeFlow 설치
+  - 주의: 
+    - Memory:16Gb, CPU:8Core인 macOS에서 실행되는 Docker Desktop의 경우
+    - Preferences > Advanced 에서 다음 설정을 권장합니다.
+    - Memory: 4GB+
+    - Swap: 2Gb+
 ```
-$ KUBEFLOW_SRC="kubeflow 설치 경로"
-$ mkdir ${KUBEFLOW_SRC}
-$ cd ${KUBEFLOW_SRC}
-$ KUBEFLOW_TAG=v0.4.1
+# install ksonnet
+$ brew install ksonnet/tap/ks
+$ ks version
+ksonnet version: 0.13.1
+jsonnet version: v0.11.2
+client-go version: kubernetes-1.10.4
+
+# install kubeflow
+$ export KUBEFLOW_TAG=v0.4.1
+$ export KUBEFLOW_SRC=/tmp/kubeflow_src
+$ export KFAPP=eks-kubeflow
+
+$ mkdir ${KUBEFLOW_SRC} && cd ${KUBEFLOW_SRC}
 $ curl https://raw.githubusercontent.com/kubeflow/kubeflow/${KUBEFLOW_TAG}/scripts/download.sh | bash
 
-# 또는 shell script 실행
-
-$ cd kubeflow
-$ ./kf-download.sh
-```
-
-## - ksonnet 응용 프로그램 설정 및 Kubeflow 전개
-```
-$ KUBEFLOW_SRC="kubeflow 설치 경로"
-$ KFAPP=kf-app
-$ cd ${KUBEFLOW_SRC}
-$ ./scripts/kfctl.sh init ${KFAPP} --platform none
+$ sh ${KUBEFLOW_SRC}/scripts/kfctl.sh init ${KFAPP} --platform none
 $ cd ${KFAPP}
-$ ../scripts/kfctl.sh generate k8s
-$ ../scripts/kfctl.sh apply k8s
-
-# 또는 shell script 실행
-
-$ cd kubeflow
-$ ./kf-setup.sh
+$ sh ${KUBEFLOW_SRC}/scripts/kfctl.sh generate k8s
+$ sh ${KUBEFLOW_SRC}/scripts/kfctl.sh apply k8s
 ```
 
-## - 전개된 Kubeflow 삭제
+## - 설치된 Kubeflow 삭제
 ```
 $ cd ${KUBEFLOW_SRC}/${KFAPP}
-$ ../scripts/kfctl.sh delete k8s
+$ sh ${KUBEFLOW_SRC}/scripts/kfctl.sh delete k8s
 ```
 
 ## - Kubeflow 실행 및 웹 UI
