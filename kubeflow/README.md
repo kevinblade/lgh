@@ -51,9 +51,9 @@ $ sh ${KUBEFLOW_SRC}/scripts/kfctl.sh delete k8s
 $ kubectl port-forward -n kubeflow `kubectl get pods -n kubeflow --selector=service=ambassador -o jsonpath='{.items[0].metadata.name}'` 8080:80
 ```
 
-## - 브라우저에서 http://localhost:8080/ 로 접속
+- 브라우저에서 http://localhost:8080/ 로 접속
 
-## Kubernetes Dashboard 설치
+## - Kubernetes Dashboard 설치
 
 ```
 $ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml
