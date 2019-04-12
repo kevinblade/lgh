@@ -26,7 +26,7 @@ client-go version: kubernetes-1.10.4
 
 # install kubeflow
 $ export KUBEFLOW_TAG=v0.4.1
-$ export KUBEFLOW_SRC=$HOME/kubeflow_src  # 본인 환경에 맞게 변경하세요.
+$ export KUBEFLOW_SRC=$(pwd)/kubeflow_src # 본인 환경에 맞게 변경하세요.
 $ export KFAPP=lgh-kubeflow               # 본인 환경에 맞게 변경하세요.
 
 $ mkdir ${KUBEFLOW_SRC} && cd ${KUBEFLOW_SRC}
