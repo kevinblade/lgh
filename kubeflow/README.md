@@ -52,3 +52,13 @@ $ kubectl port-forward -n kubeflow `kubectl get pods -n kubeflow --selector=serv
 ```
 
 - 브라우저에서 http://localhost:8080/ 로 접속
+
+## Kubernetes Dashboard 설치
+
+```
+$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v1.10.1/src/deploy/recommended/kubernetes-dashboard.yaml
+# 로컬에서 접속하기 위해서는 보안 채널을 만들기 위해서 다음 명령을 사용한다.
+$ kubectl proxy
+```
+
+- 브라우저에서 http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/ 로 접속
