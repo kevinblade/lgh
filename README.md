@@ -14,13 +14,13 @@
 └── kubeflow
 ```
 
-## no-gpu/Dockerfile 빌드
+## - no-gpu/Dockerfile 빌드
 ```
 $ docker build -t lgh-aml-container:no-gpu .                    # Dockerfile이 존재하는 폴더에서 실행.
 $ docker image prune --force                                    # 기존에 빌드한 이미지 중 사용이 안되는 것들을 삭제.
 ```
 
-## lgh-aml-container:no-gpu 실행 후 JupyterLab 사용하기
+## - lgh-aml-container:no-gpu 실행 후 JupyterLab 사용하기
 ```
 $ docker run --rm -it -d -p 9200:8888 lgh-aml-container:no-gpu  # -d 옵션으로 인해 데몬으로 실행, 실행 로그를 보기 원하면 -d 옵션 제거.
 # 내 로컬 브라우저에서 http://211.170.240.54:9200 로 접근.
