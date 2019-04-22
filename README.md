@@ -16,11 +16,13 @@
 
 ## no-gpu/Dockerfile 빌드
 ```
-$ docker build -t lgh-aml-container:no-gpu .
+$ docker build -t lgh-aml-container:no-gpu .                    # Dockerfile이 존재하는 폴더에서 실행.
+$ docker image prune --force                                    # 기존에 빌드한 이미지 중 사용이 안되는 것들을 삭제.
 ```
 
-## lgh-aml-container:no-gpu 실행
+## lgh-aml-container:no-gpu 실행 후 JupyterLab 사용하기
 ```
-$ docker run --rm -it lgh-aml-container:no-gpu
-# 브라우저에서 http://211.170.240.54:8888/?token=ef10b995810b7c1deb28e0c13dad2a1f762677bd5748739a 로 접근.
+$ docker run --rm -it -d -p 9200:8888 lgh-aml-container:no-gpu  # -d 옵션으로 인해 데몬으로 실행, 실행 로그를 보기 원하면 -d 옵션 제거.
+# 내 로컬 브라우저에서 http://211.170.240.54:9200 로 접근.
+# 암호 설정을 컨테이너 실행시 root로 설정되어 있음. 암호입력창에 root를 입력하면 JupyterLab 홈화면으로 이동.
 ```
