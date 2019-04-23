@@ -9,14 +9,6 @@ ARG JUPYTERHUB_RUNTIME_DIR=/srv/jupyterhub
 ARG JUPYTERHUB_USER_GROUP=jupyterhub
 ARG JUPYTERHUB_CONFIG_FILE=jupyter_config.py
 
-# Airflow
-ARG AIRFLOW_VERSION=1.10.2
-ARG AIRFLOW_HOME=/usr/local/airflow
-ARG AIRFLOW_CONFIG_FILE=airflow.cfg
-ARG AIRFLOW_DEPS=""
-ARG PYTHON_DEPS=""
-ENV AIRFLOW_GPL_UNIDECODE yes
-
 USER root
 
 RUN groupadd ${JUPYTERHUB_USER_GROUP} && \
@@ -35,7 +27,7 @@ RUN apt-get install -y nodejs
 RUN npm install -g configurable-http-proxy core-js@3
 
 # Installing python packages
-RUN pip install sqlalchemy==1.2.19 tornado jinja2==2.10.0 traitlets requests scikit-learn pandas apache-airflow[postgres] dvc jupyterlab==0.35.4 jupyterlab-server==0.2.0 jupyterhub
+RUN pip install sqlalchemy==1.2.19 tornado jinja2==2.10.0 traitlets requests scikit-learn pandas jupyterlab==0.35.4 jupyterlab-server==0.2.0 jupyterhub
 
 # Run JupyterHub as Docker main process
 LABEL org.jupyter.service="jupyterhub"
@@ -50,11 +42,6 @@ RUN mkdir -p ${AIRFLOW_HOME}
 # Copy jupyter_config.py to container
 COPY ${JUPYTERHUB_CONFIG_FILE}} ${JUPYTERHUB_RUNTIME_DIR}/${JUPYTERHUB_CONFIG_FILE}
 
-# Copy airflow.cfg to container
-COPY ${AIRFLOW_CONFIG_FILE} ${AIRFLOW_HOME}/${AIRFLOW_CONFIG_FILE}
-
-RUN chown -R airflow: ${AIRFLOW_HOME}
-
-EXPOSE 8000 8080 5555 8793
+EXPOSE 8000
 
 CMD ["jupyterhub", "-f", "${JUPYTERHUB_RUNTIME_DIR}/${JUPYTERHUB_CONFIG_FILE}"]
