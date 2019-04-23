@@ -1,13 +1,30 @@
 FROM tensorflow/tensorflow:latest-py3
 
+# Never prompts the user for choices on installation/configuration of packages
+ENV DEBIAN_FRONTEND noninteractive
+ENV TERM linux
+
+# JupyterHub
+ARG JUPYTERHUB_RUNTIME_DIR=/srv/jupyterhub
+ARG JUPYTERHUB_USER_GROUP=jupyterhub
+ARG JUPYTERHUB_CONFIG_FILE=jupyter_config.py
+
+# Airflow
+ARG AIRFLOW_VERSION=1.10.2
+ARG AIRFLOW_HOME=/usr/local/airflow
+ARG AIRFLOW_CONFIG_FILE=airflow.cfg
+ARG AIRFLOW_DEPS=""
+ARG PYTHON_DEPS=""
+ENV AIRFLOW_GPL_UNIDECODE yes
+
 USER root
 
-RUN groupadd jupyterhub && \
-  useradd -g jupyterhub -ms /bin/bash admin -p "$(openssl passwd -1 admin)" && \
-  useradd -g jupyterhub -ms /bin/bash user1 -p "$(openssl passwd -1 user1)" && \
-  useradd -g jupyterhub -ms /bin/bash user2 -p "$(openssl passwd -1 user2)" && \
-  useradd -g jupyterhub -ms /bin/bash user3 -p "$(openssl passwd -1 user3)" && \
-  useradd -g jupyterhub -ms /bin/bash user4 -p "$(openssl passwd -1 user4)"
+RUN groupadd ${JUPYTERHUB_USER_GROUP} && \
+  useradd -g ${JUPYTERHUB_USER_GROUP} -ms /bin/bash admin -p "$(openssl passwd -1 admin)" && \
+  useradd -g ${JUPYTERHUB_USER_GROUP} -ms /bin/bash user1 -p "$(openssl passwd -1 user1)" && \
+  useradd -g ${JUPYTERHUB_USER_GROUP} -ms /bin/bash user2 -p "$(openssl passwd -1 user2)" && \
+  useradd -g ${JUPYTERHUB_USER_GROUP} -ms /bin/bash user3 -p "$(openssl passwd -1 user3)" && \
+  useradd -g ${JUPYTERHUB_USER_GROUP} -ms /bin/bash user4 -p "$(openssl passwd -1 user4)"
 
 # Installing npm, nodejs
 RUN apt-get update && apt-get install -y curl
@@ -26,10 +43,18 @@ LABEL org.jupyter.service="jupyterhub"
 # Installing jupyterlab-hub for adding Hub menu on JupyterLab
 RUN jupyter labextension install @jupyterlab/hub-extension
 
-RUN mkdir -p /srv/jupyterhub
+RUN mkdir -p ${JUPYTERHUB_RUNTIME_DIR}
 
-COPY jupyterhub_config.py /srv/jupyterhub
+RUN mkdir -p ${AIRFLOW_HOME}
 
-EXPOSE 8000
+# Copy jupyter_config.py to container
+COPY ${JUPYTERHUB_CONFIG_FILE}} ${JUPYTERHUB_RUNTIME_DIR}/${JUPYTERHUB_CONFIG_FILE}
 
-CMD ["jupyterhub", "-f", "/srv/jupyterhub/jupyterhub_config.py"]
+# Copy airflow.cfg to container
+COPY ${AIRFLOW_CONFIG_FILE} ${AIRFLOW_HOME}/${AIRFLOW_CONFIG_FILE}
+
+RUN chown -R airflow: ${AIRFLOW_HOME}
+
+EXPOSE 8000 8080 5555 8793
+
+CMD ["jupyterhub", "-f", "${JUPYTERHUB_RUNTIME_DIR}/${JUPYTERHUB_CONFIG_FILE}"]
