@@ -37,8 +37,6 @@ RUN jupyter labextension install @jupyterlab/hub-extension
 
 RUN mkdir -p ${JUPYTERHUB_RUNTIME_DIR}
 
-RUN mkdir -p ${AIRFLOW_HOME}
-
 # Copy jupyter_config.py to container
 COPY ${JUPYTERHUB_CONFIG_FILE}} ${JUPYTERHUB_RUNTIME_DIR}/${JUPYTERHUB_CONFIG_FILE}
 
