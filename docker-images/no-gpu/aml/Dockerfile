@@ -81,5 +81,4 @@ EXPOSE 8000
 
 RUN chmod +x entrypoint.sh
 
-ENTRYPOINT "./entrypoint.sh"
-CMD "/bin/bash"
+CMD "./entrypoint.sh"
