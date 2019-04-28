@@ -68,16 +68,18 @@ RUN apt-get install dvc
 RUN mkdir -p ${JUPYTERHUB_RUNTIME_DIR}
 
 # Copy jupyter_config.py to container
-COPY ${JUPYTERHUB_CONFIG_FILE}} ${JUPYTERHUB_RUNTIME_DIR}/${JUPYTERHUB_CONFIG_FILE}
+COPY ${JUPYTERHUB_CONFIG_FILE} ${JUPYTERHUB_RUNTIME_DIR}/${JUPYTERHUB_CONFIG_FILE}
+COPY entrypoint.sh ./
 
 # Installing jupyterlab-hub for adding Hub menu on JupyterLab
 # RUN conda activate
 RUN . /opt/conda/etc/profile.d/conda.sh && \
   conda activate base && \
-  jupyter labextension install @jupyterlab/hub-extension \
-  jupyterhub -f ${JUPYTERHUB_RUNTIME_DIR}/${JUPYTERHUB_CONFIG_FILE}
+  jupyter labextension install @jupyterlab/hub-extension
 
 EXPOSE 8000
 
-# ENTRYPOINT [ "/usr/bin/tini", "--" ]
-CMD [ "/bin/bash" ]
+RUN chmod +x entrypoint.sh
+
+ENTRYPOINT "./entrypoint.sh"
+CMD "/bin/bash"

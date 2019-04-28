@@ -38,7 +38,7 @@ RUN jupyter labextension install @jupyterlab/hub-extension
 RUN mkdir -p ${JUPYTERHUB_RUNTIME_DIR}
 
 # Copy jupyter_config.py to container
-COPY ${JUPYTERHUB_CONFIG_FILE}} ${JUPYTERHUB_RUNTIME_DIR}/${JUPYTERHUB_CONFIG_FILE}
+COPY ${JUPYTERHUB_CONFIG_FILE} ${JUPYTERHUB_RUNTIME_DIR}/${JUPYTERHUB_CONFIG_FILE}
 
 EXPOSE 8000
 
