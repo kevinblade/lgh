@@ -22,13 +22,6 @@ RUN wget --quiet https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.
   echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
   echo "conda activate base" >> ~/.bashrc
 
-# RUN apt-get install -y curl grep sed dpkg && \
-#   TINI_VERSION=`curl https://github.com/krallin/tini/releases/latest | grep -o "/v.*\"" | sed 's:^..\(.*\).$:\1:'` && \
-#   curl -L "https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini_${TINI_VERSION}.deb" > tini.deb && \
-#   dpkg -i tini.deb && \
-#   rm tini.deb && \
-# apt-get clean
-
 # JupyterHub
 ARG JUPYTERHUB_RUNTIME_DIR=/srv/jupyterhub
 ARG JUPYTERHUB_USER_GROUP=jupyterhub
