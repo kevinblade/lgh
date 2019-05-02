@@ -6,7 +6,9 @@ USER root
 ENV DEBIAN_FRONTEND noninteractive
 ENV TERM linux
 
-# Anaconda3
+#
+# Install Anaconda3
+#
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 ENV PATH /opt/conda/bin:$PATH
 
@@ -22,11 +24,14 @@ RUN wget --quiet https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.
   echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
   echo "conda activate base" >> ~/.bashrc
 
-# JupyterHub
+#
+# JupyterHub arguments
+#
 ARG JUPYTERHUB_RUNTIME_DIR=/srv/jupyterhub
 ARG JUPYTERHUB_USER_GROUP=jupyterhub
 ARG JUPYTERHUB_CONFIG_FILE=jupyterhub_config.py
 
+# Add users for Jupyterhub with Linux PAM authentication
 RUN groupadd ${JUPYTERHUB_USER_GROUP} && \
   useradd -g ${JUPYTERHUB_USER_GROUP} -ms /bin/bash admin -p "$(openssl passwd -1 admin)" && \
   useradd -g ${JUPYTERHUB_USER_GROUP} -ms /bin/bash user1 -p "$(openssl passwd -1 user1)" && \
@@ -34,13 +39,14 @@ RUN groupadd ${JUPYTERHUB_USER_GROUP} && \
   useradd -g ${JUPYTERHUB_USER_GROUP} -ms /bin/bash user3 -p "$(openssl passwd -1 user3)" && \
   useradd -g ${JUPYTERHUB_USER_GROUP} -ms /bin/bash user4 -p "$(openssl passwd -1 user4)"
 
+# Prepare to install Jupyterehub
 RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get install -y nodejs
 
 # Installing http-proxy
 RUN npm install -g configurable-http-proxy
 
-# Installing python packages
+# Installing python packages: airflow, pandas, jupyterlab, scijit-learn, tensorflow, etc.
 RUN conda install -y sqlalchemy tornado jinja2 traitlets requests scikit-learn pandas jupyterlab jupyterlab_server tensorflow
 RUN conda install -y --override-channels -c conda-forge airflow airflow-with-async \
   airflow-with-azure_blob_storage airflow-with-celery airflow-with-cgroups \
@@ -54,24 +60,42 @@ RUN conda install -y --override-channels -c conda-forge airflow airflow-with-asy
 # RUN conda install -y -c conda-forge/label/cf201901 airflow-with-azure_cosmos 
 RUN conda install -y --override-channels -c conda-forge asciimatics jupyterhub
 
-RUN wget https://dvc.org/deb/dvc.list -O /etc/apt/sources.list.d/dvc.list
-RUN apt-get update
-RUN apt-get install dvc
-
+# Config jupyterhub
 RUN mkdir -p ${JUPYTERHUB_RUNTIME_DIR}
 
 # Copy jupyter_config.py to container
 COPY ${JUPYTERHUB_CONFIG_FILE} ${JUPYTERHUB_RUNTIME_DIR}/${JUPYTERHUB_CONFIG_FILE}
 COPY entrypoint.sh ./
 
-# Installing jupyterlab-hub for adding Hub menu on JupyterLab
 # RUN conda activate
+# and installing jupyterlab-hub for adding Hub menu on JupyterLab
 RUN . /opt/conda/etc/profile.d/conda.sh && \
   conda activate base && \
   jupyter labextension install @jupyterlab/hub-extension
 
-EXPOSE 8000
+#
+# Installing DVC
+#
+RUN wget https://dvc.org/deb/dvc.list -O /etc/apt/sources.list.d/dvc.list
+RUN apt-get update
+RUN apt-get install dvc
+
+#
+# Airflow arguments
+#
+ARG AIRFLOW_HOME=/home/airflow
+ARG AIRFLOW_CFG=airflow.cfg
+
+# Config airflow
+RUN mkdir -p ${AIRFLOW_HOME}
+
+COPY ${AIRFLOW_CFG} ${AIRFLOW_HOME}/${AIRFLOW_CFG}
+
+# Expose ports - jupyterhub: 8000, airflow: 8080
+EXPOSE 8000 8080
 
 RUN chmod +x entrypoint.sh
 
+# Execute the entrupoint.sh as a default command at first time
+# If you with a command at docker run then the command is executed instead of the entrypoint.sh
 CMD "./entrypoint.sh"
