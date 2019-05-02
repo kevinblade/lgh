@@ -29,7 +29,9 @@ c.JupyterHub.db_url = pjoin(runtime_dir, 'jupyterhub.sqlite')
 c.LocalAuthenticator.create_system_users = True
 
 # specify users and admin
-c.Authenticator.whitelist = {'admin', 'user1', 'user2', 'user3', 'user4'}
+c.Authenticator.whitelist = {'admin', 'mlsapp',
+                             'user1', 'user2',
+                             'user3', 'user4'}
 c.Authenticator.admin_users = {'admin'}
 
 # specify default Spawner to JupyterLab

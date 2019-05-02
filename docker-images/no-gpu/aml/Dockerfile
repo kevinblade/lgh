@@ -34,6 +34,7 @@ ARG JUPYTERHUB_CONFIG_FILE=jupyterhub_config.py
 # Add users for Jupyterhub with Linux PAM authentication
 RUN groupadd ${JUPYTERHUB_USER_GROUP} && \
   useradd -g ${JUPYTERHUB_USER_GROUP} -ms /bin/bash admin -p "$(openssl passwd -1 admin)" && \
+  useradd -g ${JUPYTERHUB_USER_GROUP} -ms /bin/bash mlsapp -p "$(openssl passwd -1 mlsapp)" && \
   useradd -g ${JUPYTERHUB_USER_GROUP} -ms /bin/bash user1 -p "$(openssl passwd -1 user1)" && \
   useradd -g ${JUPYTERHUB_USER_GROUP} -ms /bin/bash user2 -p "$(openssl passwd -1 user2)" && \
   useradd -g ${JUPYTERHUB_USER_GROUP} -ms /bin/bash user3 -p "$(openssl passwd -1 user3)" && \
