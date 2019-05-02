@@ -83,7 +83,7 @@ RUN apt-get install dvc
 #
 # Airflow arguments
 #
-ARG AIRFLOW_HOME=/home/airflow
+ARG AIRFLOW_HOME=/root/airflow
 ARG AIRFLOW_CFG=airflow.cfg
 
 # Config airflow
