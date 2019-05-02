@@ -85,10 +85,13 @@ RUN apt-get install dvc
 # Airflow arguments
 #
 ARG AIRFLOW_HOME=/root/airflow
+ARG AIRFLOW_DAGS=/root/airflow/dags
 ARG AIRFLOW_CFG=airflow.cfg
+ARG MLS_FOLDER=/home/mlsapp/mls
 
 # Config airflow
 RUN mkdir -p ${AIRFLOW_HOME}
+RUN mkdir -p ${AIRFLOW_DAGS}
 
 COPY ${AIRFLOW_CFG} ${AIRFLOW_HOME}/${AIRFLOW_CFG}
 
